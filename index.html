@@ -16,6 +16,9 @@
     <!-- Icon Library for Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
+    <!-- Chart.js CDN for Statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body { font-family: 'Inter', sans-serif; }
         input:disabled { background-color: #f3f4f6; cursor: not-allowed; color: #6b7280; }
@@ -161,7 +164,54 @@
         <div class="max-w-7xl mx-auto animate-fade-in">
             <header class="bg-white shadow rounded-lg mb-6"><div class="flex justify-between items-center px-4 py-4 sm:px-6"><h1 class="text-xl font-semibold text-gray-900">Dashboard Admin</h1><button id="admin-logout-btn" class="text-sm font-medium text-white bg-red-600 hover:bg-red-700 px-4 py-2 rounded-md transition"><i class="fas fa-sign-out-alt mr-2"></i>Logout</button></div></header>
             <main>
-                <div class="border-b border-gray-200 bg-white px-4"><nav class="-mb-px flex space-x-8" aria-label="Tabs"><button id="admin-tab-email" class="admin-tab active whitespace-nowrap py-4 px-1 text-sm font-medium">Permohonan Email Baru</button><button id="admin-tab-reset" class="admin-tab whitespace-nowrap py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">Reset Password</button></nav></div>
+                <div class="border-b border-gray-200 bg-white px-4">
+                    <nav class="-mb-px flex space-x-8" aria-label="Tabs">
+                        <button id="admin-tab-laporan" class="admin-tab whitespace-nowrap py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">Laporan & Statistik</button>
+                        <button id="admin-tab-email" class="admin-tab active whitespace-nowrap py-4 px-1 text-sm font-medium">Permohonan Email Baru</button>
+                        <button id="admin-tab-reset" class="admin-tab whitespace-nowrap py-4 px-1 text-sm font-medium text-gray-500 hover:text-gray-700">Reset Password</button>
+                    </nav>
+                </div>
+                <!-- Konten Tab Laporan & Statistik -->
+                <div id="admin-content-laporan" class="hidden">
+                    <div class="bg-white shadow rounded-lg rounded-t-none p-4 sm:p-6">
+                        <!-- Kartu Statistik -->
+                        <div>
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Ringkasan Kinerja Layanan</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-4">
+                                <div class="bg-blue-50 p-5 rounded-lg border border-blue-200"><dt class="text-sm font-medium text-gray-500 truncate">Email Baru (Bulan Ini)</dt><dd id="stat-email-bulan-ini" class="mt-1 text-3xl font-semibold text-gray-900">0</dd></div>
+                                <div class="bg-yellow-50 p-5 rounded-lg border border-yellow-200"><dt class="text-sm font-medium text-gray-500 truncate">Reset Password (Bulan Ini)</dt><dd id="stat-reset-bulan-ini" class="mt-1 text-3xl font-semibold text-gray-900">0</dd></div>
+                                <div class="bg-orange-50 p-5 rounded-lg border border-orange-200"><dt class="text-sm font-medium text-gray-500 truncate">Total Menunggu Proses</dt><dd id="stat-total-menunggu" class="mt-1 text-3xl font-semibold text-gray-900">0</dd></div>
+                                <div class="bg-green-50 p-5 rounded-lg border border-green-200"><dt class="text-sm font-medium text-gray-500 truncate">Tingkat Keberhasilan</dt><dd id="stat-tingkat-sukses" class="mt-1 text-3xl font-semibold text-gray-900">0%</dd></div>
+                            </div>
+                        </div>
+
+                        <!-- KPI Section -->
+                        <div class="mt-8">
+                            <h3 class="text-lg leading-6 font-medium text-gray-900">Key Performance Indicators (KPI) Layanan</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 mt-4">
+                                <div class="bg-white p-5 rounded-lg border">
+                                    <div class="flex items-start"><div class="flex-shrink-0 bg-indigo-500 rounded-md p-3"><i class="fas fa-clock text-white fa-lg"></i></div><div class="ml-4"><dl><dt class="text-sm font-medium text-gray-500">Waktu Respons Rata-rata</dt><dd class="flex items-baseline"><p class="text-2xl font-semibold text-gray-900">4.5 Jam</p><p class="ml-2 flex items-baseline text-sm font-semibold text-green-600"><i class="fas fa-arrow-up mr-1"></i>Lebih cepat</p></dd></dl></div></div>
+                                </div>
+                                <div class="bg-white p-5 rounded-lg border">
+                                    <div class="flex items-start"><div class="flex-shrink-0 bg-teal-500 rounded-md p-3"><i class="fas fa-check-double text-white fa-lg"></i></div><div class="ml-4"><dl><dt class="text-sm font-medium text-gray-500">Penyelesaian Sesuai SLA</dt><dd><p class="text-2xl font-semibold text-gray-900">98.2%</p><div class="w-full bg-gray-200 rounded-full h-1.5 mt-2"><div class="bg-teal-500 h-1.5 rounded-full" style="width: 98.2%"></div></div></dd></dl></div></div>
+                                </div>
+                                <div class="bg-white p-5 rounded-lg border">
+                                    <div class="flex items-start"><div class="flex-shrink-0 bg-red-500 rounded-md p-3"><i class="fas fa-times-circle text-white fa-lg"></i></div><div class="ml-4"><dl><dt class="text-sm font-medium text-gray-500">Tingkat Penolakan</dt><dd class="flex items-baseline"><p class="text-2xl font-semibold text-gray-900">1.8%</p><p class="ml-2 flex items-baseline text-sm font-semibold text-green-600"><i class="fas fa-arrow-down mr-1"></i>Menurun</p></dd></dl></div></div>
+                                </div>
+                                <div class="bg-white p-5 rounded-lg border">
+                                    <div class="flex items-start"><div class="flex-shrink-0 bg-amber-500 rounded-md p-3"><i class="fas fa-star text-white fa-lg"></i></div><div class="ml-4"><dl><dt class="text-sm font-medium text-gray-500">Kepuasan Pengguna</dt><dd><p id="kpi-kepuasan-nilai" class="text-2xl font-semibold text-gray-900">4.9/5.0</p><div id="kpi-kepuasan-bintang" class="flex items-center mt-1 text-amber-500"></div></dd></dl></div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Area Grafik -->
+                        <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 mt-8">
+                            <div class="lg:col-span-3 bg-white p-4 rounded-lg border"><h4 class="font-semibold text-gray-800">Tren Layanan Bulanan</h4><canvas id="monthlyTrendChart"></canvas></div>
+                             <div class="lg:col-span-2 bg-white p-4 rounded-lg border"><h4 class="font-semibold text-gray-800">Komposisi Status</h4><canvas id="statusChart"></canvas></div>
+                        </div>
+                        <div class="mt-6 bg-white p-4 rounded-lg border"><h4 class="font-semibold text-gray-800">Permohonan per Perangkat Daerah</h4><canvas id="opdChart"></canvas></div>
+                    </div>
+                </div>
                 <div id="admin-content-email" class=""><div class="bg-white shadow rounded-lg rounded-t-none overflow-hidden"><div class="p-4 sm:p-6 border-b border-gray-200"><div class="flex items-center justify-between"><div><h3 class="text-lg leading-6 font-medium text-gray-900">Data Permohonan Email Baru</h3><p class="mt-1 max-w-2xl text-sm text-gray-500">Daftar permohonan yang memerlukan tindakan.</p></div><div class="w-48"><select id="filter-email-status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"><option value="all">Semua Status</option><option value="menunggu">Menunggu</option><option value="disetujui">Disetujui</option><option value="ditolak">Ditolak</option></select></div></div></div><div class="overflow-x-auto"><table class="min-w-full divide-y divide-gray-200"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pemohon</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Perangkat Daerah</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th></tr></thead><tbody id="table-body-email" class="bg-white divide-y divide-gray-200"></tbody></table></div><nav id="pagination-email" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"></nav></div></div>
                 <div id="admin-content-reset" class="hidden"><div class="bg-white shadow rounded-lg rounded-t-none overflow-hidden"><div class="p-4 sm:p-6 border-b border-gray-200"><div class="flex items-center justify-between"><div><h3 class="text-lg leading-6 font-medium text-gray-900">Data Permintaan Reset Password</h3><p class="mt-1 max-w-2xl text-sm text-gray-500">Daftar permintaan yang memerlukan tindakan.</p></div><div class="w-48"><select id="filter-reset-status" class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"><option value="all">Semua Status</option><option value="menunggu">Menunggu</option><option value="selesai">Selesai</option><option value="ditolak">Ditolak</option></select></div></div></div><div class="overflow-x-auto"><table class="min-w-full divide-y divide-gray-200"><thead class="bg-gray-50"><tr><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ASN yang Direset</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Diusulkan oleh</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th><th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th></tr></thead><tbody id="table-body-reset" class="bg-white divide-y divide-gray-200"></tbody></table></div><nav id="pagination-reset" class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6"></nav></div></div>
             </main>
@@ -170,11 +220,18 @@
     
     <!-- ======================= MODAL EMAIL ======================= -->
     <div id="process-email-modal" class="page hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay"><div class="modal-content w-full max-w-2xl bg-white rounded-xl shadow-xl"><div class="flex justify-between items-center p-4 border-b"><h3 class="text-lg font-semibold">Proses Permohonan Email</h3><button class="close-modal-btn text-gray-400 hover:text-gray-600 transition">&times;</button></div><div class="p-6 space-y-4"><div class="flex justify-between items-start"><div><p><strong>Diusulkan oleh:</strong> <span id="process-email-pengusul"></span></p><p><strong>Perangkat Daerah:</strong> <span id="process-email-opd"></span></p><p><strong>Tanggal Pengajuan:</strong> <span id="process-email-tanggal"></span></p></div><div class="flex space-x-2"><button id="process-all-reject" class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200">Tolak Semua</button><button id="process-all-approve" class="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-md hover:bg-green-200">Setujui Semua</button></div></div><div><strong class="text-sm font-medium text-gray-900">Daftar Pemohon:</strong><div id="process-email-pemohon-container" class="mt-2 text-sm text-gray-700 bg-gray-50 p-2 rounded-md border max-h-64 overflow-y-auto space-y-2"></div></div></div><div class="flex justify-end p-4 bg-gray-50 rounded-b-xl space-x-3"><button class="close-modal-btn px-4 py-2 bg-gray-200 rounded-md">Batal</button><button class="px-4 py-2 bg-blue-600 text-white rounded-md">Simpan Perubahan & Proses</button></div></div></div>
-    <div id="detail-email-modal" class="page hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay"><div class="modal-content w-full max-w-lg bg-white rounded-xl shadow-xl"><div class="flex justify-between items-center p-4 border-b"><h3 class="text-lg font-semibold">Detail Permohonan Email</h3><button class="close-modal-btn text-gray-400">&times;</button></div><div class="p-6 space-y-4"><div><strong class="text-sm font-medium text-gray-900">Daftar Pemohon:</strong><div id="detail-email-pemohon-container" class="mt-1 text-sm text-gray-700 bg-gray-50 p-3 rounded-md border max-h-40 overflow-y-auto"></div></div><p><strong>Status:</strong> <span id="detail-email-status"></span></p><p><strong>Tanggal Diproses:</strong> <span id="detail-email-tanggal-proses"></span></p></div><div class="flex justify-end p-4 bg-gray-50 rounded-b-xl"><button class="close-modal-btn px-4 py-2 bg-blue-600 text-white rounded-md">Tutup</button></div></div></div>
+    <div id="detail-email-modal" class="page hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay"><div class="modal-content w-full max-w-lg bg-white rounded-xl shadow-xl"><div class="flex justify-between items-center p-4 border-b"><h3 class="text-lg font-semibold">Detail Permohonan Email</h3><button class="close-modal-btn text-gray-400">&times;</button></div><div class="p-6 space-y-4"><div><strong class="text-sm font-medium text-gray-900">Daftar Pemohon:</strong><div id="detail-email-pemohon-container" class="mt-1 text-sm text-gray-700 bg-gray-50 p-3 rounded-md border max-h-40 overflow-y-auto"></div></div><p><strong>Status:</strong> <span id="detail-email-status"></span></p><p><strong>Tanggal Diproses:</strong> <span id="detail-email-tanggal-proses"></span></p><div id="detail-email-feedback-section" class="mt-4 pt-4 border-t hidden"><h4 class="font-semibold text-gray-800">Feedback Pengguna</h4><div id="detail-email-feedback-content" class="mt-2"></div></div></div><div class="flex justify-end p-4 bg-gray-50 rounded-b-xl"><button class="close-modal-btn px-4 py-2 bg-blue-600 text-white rounded-md">Tutup</button></div></div></div>
 
     <!-- ======================= MODAL RESET - REWORKED ======================= -->
     <div id="process-reset-modal" class="page hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay"><div class="modal-content w-full max-w-2xl bg-white rounded-xl shadow-xl"><div class="flex justify-between items-center p-4 border-b"><h3 class="text-lg font-semibold">Proses Reset Password</h3><button class="close-modal-btn text-gray-400">&times;</button></div><div class="p-6 space-y-4"><div class="flex justify-between items-start"><div><p><strong>Diusulkan oleh:</strong> <span id="process-reset-pengusul"></span></p><p><strong>Perangkat Daerah:</strong> <span id="process-reset-opd"></span></p><p><strong>Tanggal Permintaan:</strong> <span id="process-reset-tanggal"></span></p></div><div class="flex space-x-2"><button id="process-reset-all-reject" class="text-xs px-3 py-1 bg-red-100 text-red-700 rounded-md hover:bg-red-200">Tolak Semua</button><button id="process-reset-all-approve" class="text-xs px-3 py-1 bg-green-100 text-green-700 rounded-md hover:bg-green-200">Setujui Semua</button></div></div><div><strong class="text-sm font-medium text-gray-900">Daftar ASN yang akan Direset:</strong><div id="process-reset-pemohon-container" class="mt-2 text-sm text-gray-700 bg-gray-50 p-2 rounded-md border max-h-64 overflow-y-auto space-y-2"></div></div></div><div class="flex justify-end p-4 bg-gray-50 rounded-b-xl space-x-3"><button class="close-modal-btn px-4 py-2 bg-gray-200 rounded-md">Batal</button><button class="px-4 py-2 bg-blue-600 text-white rounded-md">Simpan & Proses Reset</button></div></div></div>
-    <div id="detail-reset-modal" class="page hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay"><div class="modal-content w-full max-w-lg bg-white rounded-xl shadow-xl"><div class="flex justify-between items-center p-4 border-b"><h3 class="text-lg font-semibold">Detail Reset Password</h3><button class="close-modal-btn text-gray-400">&times;</button></div><div class="p-6 space-y-4"><div><strong class="text-sm font-medium text-gray-900">Daftar ASN yang Direset:</strong><div id="detail-reset-pemohon-container" class="mt-1 text-sm text-gray-700 bg-gray-50 p-3 rounded-md border max-h-40 overflow-y-auto"></div></div><p><strong>Status:</strong> <span id="detail-reset-status"></span></p><p><strong>Tanggal Diproses:</strong> <span id="detail-reset-tanggal-proses"></span></p><p><strong>Diusulkan oleh:</strong> <span id="detail-reset-pengusul"></span></p></div><div class="flex justify-end p-4 bg-gray-50 rounded-b-xl"><button class="close-modal-btn px-4 py-2 bg-blue-600 text-white rounded-md">Tutup</button></div></div></div>
+    <div id="detail-reset-modal" class="page hidden fixed inset-0 z-50 flex items-center justify-center p-4 modal-overlay"><div class="modal-content w-full max-w-lg bg-white rounded-xl shadow-xl"><div class="flex justify-between items-center p-4 border-b"><h3 class="text-lg font-semibold">Detail Reset Password</h3><button class="close-modal-btn text-gray-400">&times;</button></div><div class="p-6 space-y-4"><div><strong class="text-sm font-medium text-gray-900">Daftar ASN yang Direset:</strong><div id="detail-reset-pemohon-container" class="mt-1 text-sm text-gray-700 bg-gray-50 p-3 rounded-md border max-h-40 overflow-y-auto"></div></div><p><strong>Status:</strong> <span id="detail-reset-status"></span></p><p><strong>Tanggal Diproses:</strong> <span id="detail-reset-tanggal-proses"></span></p><p><strong>Diusulkan oleh:</strong> <span id="detail-reset-pengusul"></span></p><div id="detail-reset-feedback-section" class="mt-4 pt-4 border-t hidden"><h4 class="font-semibold text-gray-800">Feedback Pengguna</h4><div id="detail-reset-feedback-content" class="mt-2"></div></div></div><div class="flex justify-end p-4 bg-gray-50 rounded-b-xl"><button class="close-modal-btn px-4 py-2 bg-blue-600 text-white rounded-md">Tutup</button></div></div></div>
+
+    <!-- ======================= FLOATING WHATSAPP BUTTON ======================= -->
+    <a href="https://wa.me/6281510599991?text=Halo%20Admin%2C%20saya%20membutuhkan%20bantuan%20terkait%20layanan%20email." target="_blank" class="fixed bottom-5 right-5 bg-green-500 hover:bg-green-600 text-white font-medium py-3 px-4 rounded-full shadow-lg flex items-center z-40 transition-transform transform hover:scale-110">
+        <i class="fab fa-whatsapp text-2xl"></i>
+        <span class="ml-2 hidden sm:block">Hubungi Diska</span>
+    </a>
+
 
     <!-- ======================= LOGIKA JAVASCRIPT ======================= -->
     <script>
@@ -191,33 +248,22 @@
             detailResetModal: document.getElementById('detail-reset-modal')
         };
         
-        // --- Dummy Data ---
+        // --- Dummy Data (Updated with feedback) ---
         const dummyDataEmail = [
-            { id: 1, pemohon: { 
-                groupName: 'Kelompok Guru SD 1',
-                list: [
-                    { nama: 'Eko Yulianto', nip: '198501012010011001', wa: '081234567891' },
-                    { nama: 'Sri Wahyuni', nip: '198602022010012002', wa: '081234567892' },
-                    { nama: 'Triyatno', nip: '198703032010011003', wa: '081234567893' },
-                    { nama: 'Citra Febrianti', nip: '198804042010012004', wa: '081234567894' },
-                ]
-            }, pengusul: 'Andi Wijaya', opd: 'Dinas Pendidikan', tanggal: '2025-07-29', status: 'menunggu' },
-            { id: 2, pemohon: 'Budi Santoso', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-07-29', status: 'menunggu' },
-            { id: 3, pemohon: 'Siti Aminah', pengusul: 'Rina Hartati', opd: 'Badan Kepegawaian Daerah', tanggal: '2025-07-28', status: 'disetujui' },
-            { id: 4, pemohon: 'Dewi Lestari', pengusul: 'Rina Hartati', opd: 'Badan Kepegawaian Daerah', tanggal: '2025-07-28', status: 'ditolak'},
+            { id: 1, pemohon: { groupName: 'Kelompok Guru SD 1', list: [ { nama: 'Eko Yulianto', nip: '198501012010011001', wa: '081234567891' }, { nama: 'Sri Wahyuni', nip: '198602022010012002', wa: '081234567892' } ] }, pengusul: 'Andi Wijaya', opd: 'Dinas Pendidikan', tanggal: '2025-07-29', status: 'menunggu', feedback: null },
+            { id: 2, pemohon: 'Budi Santoso', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-07-28', status: 'menunggu', feedback: null },
+            { id: 3, pemohon: 'Siti Aminah', pengusul: 'Rina Hartati', opd: 'Badan Kepegawaian Daerah', tanggal: '2025-07-25', status: 'disetujui', feedback: { rating: 5, comment: 'Sangat cepat dan membantu!' } },
+            { id: 4, pemohon: 'Dewi Lestari', pengusul: 'Rina Hartati', opd: 'Badan Kepegawaian Daerah', tanggal: '2025-06-20', status: 'ditolak', feedback: null},
+            { id: 5, pemohon: 'Agus Salim', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-06-15', status: 'disetujui', feedback: { rating: 4, comment: 'Prosesnya mudah, terima kasih.' } },
+            { id: 6, pemohon: 'Putra Siregar', pengusul: 'Andi Wijaya', opd: 'Dinas Pendidikan', tanggal: '2025-05-10', status: 'disetujui', feedback: { rating: 5, comment: 'Mantap!' } },
         ];
         
         const dummyDataReset = [
-            { id: 1, asn: 'Bambang Pamungkas', email: 'bambang.p@email.com', wa: '081111111111', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-07-29', status: 'menunggu' },
-            { id: 2, asn: 'Rina Nose', email: 'rina.n@email.com', wa: '082222222222', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-07-28', status: 'selesai' },
-            { id: 3, asn: {
-                groupName: 'Reset Staf TU BKD',
-                list: [
-                    { nama: 'Arief Muhammad', email: 'arief.m@email.com', wa: '083333333333'},
-                    { nama: 'Tiara Andini', email: 'tiara.a@email.com', wa: '084444444444'}
-                ]
-            }, pengusul: 'Rina Hartati', opd: 'Badan Kepegawaian Daerah', tanggal: '2025-07-28', status: 'menunggu' },
-            { id: 4, asn: 'Deddy Corbuzier', email: 'deddy.c@email.com', wa: '085555555555', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-07-26', status: 'ditolak'},
+            { id: 1, asn: 'Bambang Pamungkas', email: 'bambang.p@email.com', wa: '081111111111', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-07-29', status: 'menunggu', feedback: null },
+            { id: 2, asn: 'Rina Nose', email: 'rina.n@email.com', wa: '082222222222', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-07-28', status: 'selesai', feedback: { rating: 5, comment: 'Reset password berhasil, terima kasih banyak.' } },
+            { id: 3, asn: { groupName: 'Reset Staf TU BKD', list: [ { nama: 'Arief Muhammad', email: 'arief.m@email.com', wa: '083333333333'}, { nama: 'Tiara Andini', email: 'tiara.a@email.com', wa: '084444444444'} ] }, pengusul: 'Rina Hartati', opd: 'Badan Kepegawaian Daerah', tanggal: '2025-06-22', status: 'menunggu', feedback: null },
+            { id: 4, asn: 'Deddy Corbuzier', email: 'deddy.c@email.com', wa: '085555555555', pengusul: 'Joko Susilo', opd: 'Dinas Kominfo', tanggal: '2025-06-18', status: 'ditolak', feedback: null},
+            { id: 5, asn: 'Tukul Arwana', email: 'tukul.a@email.com', wa: '086666666666', pengusul: 'Andi Wijaya', opd: 'Dinas Pendidikan', tanggal: '2025-05-05', status: 'selesai', feedback: { rating: 4, comment: 'Ok' } },
         ];
 
         // --- State Management ---
@@ -226,11 +272,14 @@
             reset: { currentPage: 1, filter: 'all' }
         };
         const ITEMS_PER_PAGE = 10;
+        let charts = {}; // To hold chart instances
 
         // --- Element Selectors ---
         const elements = {
+            adminTabLaporan: document.getElementById('admin-tab-laporan'),
             adminTabEmail: document.getElementById('admin-tab-email'),
             adminTabReset: document.getElementById('admin-tab-reset'),
+            adminContentLaporan: document.getElementById('admin-content-laporan'),
             adminContentEmail: document.getElementById('admin-content-email'),
             adminContentReset: document.getElementById('admin-content-reset'),
             tableBodyEmail: document.getElementById('table-body-email'),
@@ -250,6 +299,20 @@
                 ditolak: 'bg-red-100 text-red-800',
             };
             return `<span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusMap[status] || 'bg-gray-100 text-gray-800'}">${status}</span>`;
+        };
+        
+        const renderStars = (rating) => {
+            let starsHtml = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    starsHtml += '<i class="fas fa-star"></i>';
+                } else if (i - rating < 1) {
+                    starsHtml += '<i class="fas fa-star-half-alt"></i>';
+                } else {
+                    starsHtml += '<i class="far fa-star"></i>';
+                }
+            }
+            return starsHtml;
         };
 
         const renderEmailTable = () => {
@@ -303,20 +366,115 @@
             container.querySelectorAll('.pagination-btn').forEach(btn => btn.addEventListener('click', () => { state.currentPage = parseInt(btn.dataset.page); renderFn(); }));
         };
         
+        // --- Statistics and Chart Functions ---
+        const renderAllCharts = () => {
+            // Destroy existing charts to prevent duplicates
+            Object.values(charts).forEach(chart => chart.destroy());
+
+            const currentMonth = new Date().getMonth(); // 0-11
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            
+            // 1. Render Stat Cards
+            const emailThisMonth = dummyDataEmail.filter(d => new Date(d.tanggal).getMonth() === currentMonth).length;
+            const resetThisMonth = dummyDataReset.filter(d => new Date(d.tanggal).getMonth() === currentMonth).length;
+            const totalWaiting = [...dummyDataEmail, ...dummyDataReset].filter(d => d.status === 'menunggu').length;
+            const totalSuccess = [...dummyDataEmail, ...dummyDataReset].filter(d => ['disetujui', 'selesai'].includes(d.status)).length;
+            const totalDone = [...dummyDataEmail, ...dummyDataReset].filter(d => d.status !== 'menunggu').length;
+            const successRate = totalDone > 0 ? Math.round((totalSuccess / totalDone) * 100) : 0;
+
+            document.getElementById('stat-email-bulan-ini').textContent = emailThisMonth;
+            document.getElementById('stat-reset-bulan-ini').textContent = resetThisMonth;
+            document.getElementById('stat-total-menunggu').textContent = totalWaiting;
+            document.getElementById('stat-tingkat-sukses').textContent = `${successRate}%`;
+
+             // Update User Satisfaction KPI
+            const feedbacks = [...dummyDataEmail, ...dummyDataReset].filter(item => item.feedback).map(item => item.feedback.rating);
+            const averageRating = feedbacks.length > 0 ? (feedbacks.reduce((a, b) => a + b, 0) / feedbacks.length).toFixed(1) : 0;
+            document.getElementById('kpi-kepuasan-nilai').textContent = `${averageRating}/5.0`;
+            document.getElementById('kpi-kepuasan-bintang').innerHTML = renderStars(averageRating);
+
+            // 2. Render Monthly Trend Chart
+            const trendLabels = [...new Set([...dummyDataEmail, ...dummyDataReset].map(d => new Date(d.tanggal).getMonth()))]
+                .sort((a,b) => a-b)
+                .map(monthIndex => monthNames[monthIndex]);
+                
+            const trendDataEmail = trendLabels.map(label => {
+                const monthIndex = monthNames.indexOf(label);
+                return dummyDataEmail.filter(d => new Date(d.tanggal).getMonth() === monthIndex).length;
+            });
+            const trendDataReset = trendLabels.map(label => {
+                const monthIndex = monthNames.indexOf(label);
+                return dummyDataReset.filter(d => new Date(d.tanggal).getMonth() === monthIndex).length;
+            });
+
+            const trendCtx = document.getElementById('monthlyTrendChart').getContext('2d');
+            charts.monthlyTrend = new Chart(trendCtx, {
+                type: 'line',
+                data: {
+                    labels: trendLabels,
+                    datasets: [
+                        { label: 'Email Baru', data: trendDataEmail, borderColor: 'rgb(59, 130, 246)', backgroundColor: 'rgba(59, 130, 246, 0.5)', tension: 0.1 },
+                        { label: 'Reset Password', data: trendDataReset, borderColor: 'rgb(245, 158, 11)', backgroundColor: 'rgba(245, 158, 11, 0.5)', tension: 0.1 }
+                    ]
+                }
+            });
+
+            // 3. Render Status Composition Chart
+            const statusData = {
+                'Disetujui/Selesai': totalSuccess,
+                'Ditolak': totalDone - totalSuccess
+            };
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            charts.status = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(statusData),
+                    datasets: [{
+                        label: 'Komposisi Status',
+                        data: Object.values(statusData),
+                        backgroundColor: ['rgb(34, 197, 94)', 'rgb(239, 68, 68)'],
+                        hoverOffset: 4
+                    }]
+                }
+            });
+
+            // 4. Render OPD Chart
+            const opdCounts = [...dummyDataEmail, ...dummyDataReset].reduce((acc, curr) => {
+                acc[curr.opd] = (acc[curr.opd] || 0) + 1;
+                return acc;
+            }, {});
+            const sortedOpd = Object.entries(opdCounts).sort((a, b) => b[1] - a[1]);
+            const opdCtx = document.getElementById('opdChart').getContext('2d');
+            charts.opd = new Chart(opdCtx, {
+                type: 'bar',
+                data: {
+                    labels: sortedOpd.map(item => item[0]),
+                    datasets: [{
+                        label: 'Total Permohonan',
+                        data: sortedOpd.map(item => item[1]),
+                        backgroundColor: 'rgba(96, 165, 250, 0.7)',
+                    }]
+                },
+                options: { indexAxis: 'y', elements: { bar: { borderWidth: 2, } }, responsive: true, plugins: { legend: { display: false } } }
+            });
+        };
+
         // --- Event Delegation ---
         document.body.addEventListener('click', (e) => {
-            e.preventDefault(); 
+            // No preventDefault here to allow links to work
             const showModal = (modalPageId) => {
                 const modalPage = pages[modalPageId];
                 modalPage.classList.remove('hidden');
                 modalPage.querySelector('.modal-content').classList.add('animate-fade-in-down');
             };
 
-            if (e.target.matches('.close-modal-btn')) {
+            if (e.target.closest('.close-modal-btn')) {
+                e.preventDefault();
                 e.target.closest('.page.fixed').classList.add('hidden');
             }
             // EMAIL MODALS
             else if (e.target.matches('.open-process-email-modal-btn')) {
+                e.preventDefault();
                 const data = dummyDataEmail.find(d => d.id == e.target.dataset.id);
                 document.getElementById('process-email-pengusul').textContent = data.pengusul;
                 document.getElementById('process-email-opd').textContent = data.opd;
@@ -330,16 +488,30 @@
                     </div>`).join('');
                 showModal('processEmailModal');
             } else if (e.target.matches('.open-detail-email-modal-btn')) {
+                e.preventDefault();
                 const data = dummyDataEmail.find(d => d.id == e.target.dataset.id);
                 const container = document.getElementById('detail-email-pemohon-container');
                 const list = (typeof data.pemohon === 'object') ? data.pemohon.list : [{ nama: data.pemohon, nip: 'N/A', wa: 'N/A' }];
                 container.innerHTML = `<ul class="space-y-2">${list.map(p => `<li><span class="font-semibold">${p.nama}</span><br><span class="text-xs text-gray-500">NIP: ${p.nip} | WA: ${p.wa}</span></li>`).join('')}</ul>`;
                 document.getElementById('detail-email-status').innerHTML = getStatusBadge(data.status);
                 document.getElementById('detail-email-tanggal-proses').textContent = data.tanggal;
+                
+                // Handle Feedback display
+                const feedbackSection = document.getElementById('detail-email-feedback-section');
+                const feedbackContent = document.getElementById('detail-email-feedback-content');
+                if (data.feedback) {
+                    feedbackSection.classList.remove('hidden');
+                    feedbackContent.innerHTML = `<div class="flex items-center text-amber-500">${renderStars(data.feedback.rating)}</div><p class="mt-2 text-gray-600 italic">"${data.feedback.comment}"</p>`;
+                } else {
+                    feedbackSection.classList.add('hidden');
+                    feedbackContent.innerHTML = '<p class="text-sm text-gray-500">Belum ada feedback dari pengguna.</p>';
+                }
+
                 showModal('detailEmailModal');
             }
             // RESET MODALS
             else if (e.target.matches('.open-process-reset-modal-btn')) {
+                e.preventDefault();
                 const data = dummyDataReset.find(d => d.id == e.target.dataset.id);
                 document.getElementById('process-reset-pengusul').textContent = data.pengusul;
                 document.getElementById('process-reset-opd').textContent = data.opd;
@@ -353,21 +525,36 @@
                     </div>`).join('');
                 showModal('processResetModal');
             } else if (e.target.matches('.open-detail-reset-modal-btn')) {
+                e.preventDefault();
                 const data = dummyDataReset.find(d => d.id == e.target.dataset.id);
                 const container = document.getElementById('detail-reset-pemohon-container');
-                 const list = (typeof data.asn === 'object') ? data.asn.list : [{ nama: data.asn, email: data.email, wa: data.wa }];
+                const list = (typeof data.asn === 'object') ? data.asn.list : [{ nama: data.asn, email: data.email, wa: data.wa }];
                 container.innerHTML = `<ul class="space-y-2">${list.map(p => `<li><span class="font-semibold">${p.nama}</span><br><span class="text-xs text-gray-500">Email: ${p.email} | WA: ${p.wa}</span></li>`).join('')}</ul>`;
                 document.getElementById('detail-reset-pengusul').textContent = data.pengusul;
                 document.getElementById('detail-reset-status').innerHTML = getStatusBadge(data.status);
                 document.getElementById('detail-reset-tanggal-proses').textContent = data.tanggal;
+
+                // Handle Feedback display
+                const feedbackSection = document.getElementById('detail-reset-feedback-section');
+                const feedbackContent = document.getElementById('detail-reset-feedback-content');
+                if (data.feedback) {
+                    feedbackSection.classList.remove('hidden');
+                    feedbackContent.innerHTML = `<div class="flex items-center text-amber-500">${renderStars(data.feedback.rating)}</div><p class="mt-2 text-gray-600 italic">"${data.feedback.comment}"</p>`;
+                } else {
+                    feedbackContent.innerHTML = '<p class="text-sm text-gray-500">Belum ada feedback dari pengguna.</p>';
+                    feedbackSection.classList.remove('hidden'); // Show the no feedback message
+                }
+
                 showModal('detailResetModal');
             }
             // ACTIONS INSIDE MODALS
             else if(e.target.closest('.pemohon-row')){
+                e.preventDefault();
                 const row = e.target.closest('.pemohon-row');
                 if(e.target.matches('.action-btn-approve')){ row.classList.remove('rejected'); row.classList.add('approved'); } 
                 else if(e.target.matches('.action-btn-reject')){ row.classList.remove('approved'); row.classList.add('rejected'); }
             } else if (e.target.closest('.modal-content')) {
+                e.preventDefault();
                 const modal = e.target.closest('.modal-content');
                 if (e.target.matches('#process-all-approve') || e.target.matches('#process-reset-all-approve')) {
                     modal.querySelectorAll('.pemohon-row').forEach(row => { row.classList.remove('rejected'); row.classList.add('approved'); });
@@ -390,7 +577,7 @@
             }
         }
         document.getElementById('login-sso-btn').addEventListener('click', (e) => { e.preventDefault(); showPage(pages.selection, 'animate-fade-in-down'); });
-        document.getElementById('login-admin-btn').addEventListener('click', (e) => { e.preventDefault(); showPage(pages.adminDashboard, 'animate-fade-in'); renderEmailTable(); renderResetTable(); });
+        document.getElementById('login-admin-btn').addEventListener('click', (e) => { e.preventDefault(); showPage(pages.adminDashboard, 'animate-fade-in'); switchAdminTab('laporan');});
         document.getElementById('select-request-email-btn').addEventListener('click', (e) => { e.preventDefault(); showPage(pages.requestEmail, 'animate-fade-in'); });
         document.getElementById('select-reset-password-btn').addEventListener('click', (e) => { e.preventDefault(); showPage(pages.resetPassword, 'animate-fade-in'); });
         const showLoginPage = (e) => { if(e) e.preventDefault(); showPage(pages.login, 'animate-fade-in'); };
@@ -400,13 +587,25 @@
         
         // --- Admin Tab Logic ---
         const switchAdminTab = (activeTab) => {
-            elements.adminTabEmail.classList.toggle('active', activeTab === 'email');
-            elements.adminTabReset.classList.toggle('active', activeTab === 'reset');
-            elements.adminContentEmail.classList.toggle('hidden', activeTab !== 'email');
-            elements.adminContentReset.classList.toggle('hidden', activeTab !== 'reset');
+            const tabs = { laporan: elements.adminTabLaporan, email: elements.adminTabEmail, reset: elements.adminTabReset };
+            const contents = { laporan: elements.adminContentLaporan, email: elements.adminContentEmail, reset: elements.adminContentReset };
+            
+            Object.keys(tabs).forEach(key => {
+                tabs[key].classList.toggle('active', key === activeTab);
+                contents[key].classList.toggle('hidden', key !== activeTab);
+            });
+
+            if (activeTab === 'laporan') {
+                renderAllCharts();
+            } else if (activeTab === 'email') {
+                renderEmailTable();
+            } else if (activeTab === 'reset') {
+                renderResetTable();
+            }
         };
-        elements.adminTabEmail.addEventListener('click', () => switchAdminTab('email'));
-        elements.adminTabReset.addEventListener('click', () => switchAdminTab('reset'));
+        elements.adminTabLaporan.addEventListener('click', (e) => {e.preventDefault(); switchAdminTab('laporan')});
+        elements.adminTabEmail.addEventListener('click', (e) => {e.preventDefault(); switchAdminTab('email')});
+        elements.adminTabReset.addEventListener('click', (e) => {e.preventDefault(); switchAdminTab('reset')});
         
         // --- Filter Logic ---
         elements.filterEmailStatus.addEventListener('change', (e) => { state.email.filter = e.target.value; state.email.currentPage = 1; renderEmailTable(); });
@@ -419,7 +618,8 @@
             const formPerorangan = document.getElementById(peroranganFormId);
             const formMasal = document.getElementById(masalFormId);
             
-            const switchTab = (active) => {
+            const switchTab = (e, active) => {
+                e.preventDefault();
                 btnPerorangan.classList.toggle('active', active === 'perorangan');
                 btnMasal.classList.toggle('active', active === 'masal');
                 formPerorangan.classList.toggle('hidden', active !== 'perorangan');
@@ -428,22 +628,22 @@
                     addRowFn();
                 }
             };
-            btnPerorangan.addEventListener('click', () => switchTab('perorangan'));
-            btnMasal.addEventListener('click', () => switchTab('masal'));
-            document.getElementById(addRowBtnId).addEventListener('click', addRowFn);
+            btnPerorangan.addEventListener('click', (e) => switchTab(e, 'perorangan'));
+            btnMasal.addEventListener('click', (e) => switchTab(e, 'masal'));
+            document.getElementById(addRowBtnId).addEventListener('click', (e) => {e.preventDefault(); addRowFn();});
         };
         
         const addNewMasalRowEmail = () => {
             const container = document.getElementById('masal-rows-container');
             const newRow = document.getElementById('masal-row-template').content.cloneNode(true);
-            newRow.querySelector('.remove-row-btn').addEventListener('click', (e) => e.target.closest('.masal-row').remove());
+            newRow.querySelector('.remove-row-btn').addEventListener('click', (e) => { e.preventDefault(); e.target.closest('.masal-row').remove(); });
             container.appendChild(newRow);
         };
 
         const addNewMasalRowReset = () => {
             const container = document.getElementById('masal-rows-container-reset');
             const newRow = document.getElementById('masal-row-template-reset').content.cloneNode(true);
-            newRow.querySelector('.remove-row-btn-reset').addEventListener('click', (e) => e.target.closest('.masal-row-reset').remove());
+            newRow.querySelector('.remove-row-btn-reset').addEventListener('click', (e) => { e.preventDefault(); e.target.closest('.masal-row-reset').remove(); });
             container.appendChild(newRow);
         };
 
